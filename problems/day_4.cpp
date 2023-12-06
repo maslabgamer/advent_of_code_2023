@@ -22,7 +22,7 @@ int parse_line(char* l) {
         // Consume whitespace
         while (*l == ' ') { l++; }
         winning_numbers.insert(consume_number<int>(&l));
-        l++; // Go one more step to skip at least one space. Pip will always be one space after the last number
+        l++; // Go one more step to skip at least one space. Pipe will always be one space after the last number
     }
     l++; // Skip over the pipe
 

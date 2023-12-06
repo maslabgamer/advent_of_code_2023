@@ -5,7 +5,6 @@
 #ifndef ADVENT_OF_CODE_2023_DAY_5_H
 #define ADVENT_OF_CODE_2023_DAY_5_H
 
-
 #include <string>
 
 class day_5 {

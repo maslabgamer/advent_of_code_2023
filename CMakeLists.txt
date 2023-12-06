@@ -18,6 +18,9 @@ add_executable(advent_of_code_2023 main.cpp
         parsing/string_parsing.cpp
         parsing/string_parsing.h
         problems/day_5.cpp
-        problems/day_5.h)
+        problems/day_5.h
+        problems/day_6.cpp
+        problems/day_6.h
+)
 
 add_subdirectory(tests)

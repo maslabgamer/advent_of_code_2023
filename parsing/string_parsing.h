@@ -26,4 +26,15 @@ static T consume_number(char** line) {
     return number;
 }
 
+template<class T>
+static void consume_all_numbers_to_array(char** line, T* out_array) {
+    int array_index = 0;
+    while (**line != NULL_TERMINATOR) {
+        while(**line == ' ') { (*line)++; }
+        T number = consume_number<T>(line);
+        out_array[array_index] = number;
+        array_index++;
+    }
+}
+
 #endif //ADVENT_OF_CODE_2023_STRING_PARSING_H
