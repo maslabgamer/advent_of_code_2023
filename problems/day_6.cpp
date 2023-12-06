@@ -45,11 +45,11 @@ void day_6::run() {
     std::vector<std::string> input_file_part_2;
     read_file(part_b, &input_file_part_2);
 
+    printf("Day 6\n");
     clock_t tStart = clock();
     int race_result = parse<int, 4>(input_file_part_1);
     auto big_race_result = parse<unsigned long long, 1>(input_file_part_2);
     printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-    printf("Day 6\n");
     printf("Part 1: %d and the correct answer was 140220!\n", race_result);
     printf("Part 2: %lld and the correct answer was 39570185!\n", big_race_result);
 }

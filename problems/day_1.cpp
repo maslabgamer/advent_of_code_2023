@@ -12,35 +12,16 @@
 
 static word_to_number word_map;
 
+template<auto PARSE_WORDS>
 int numbers_from_string(const std::string &to_parse) {
     int result = 0;
 
-    for (char left_character : to_parse) {
+    for (int left_idx = 0; left_idx < to_parse.length(); left_idx++) {
+        char left_character = to_parse.at(left_idx);
         if (isdigit(left_character)) {
             result = (left_character - '0') * 10;
             break;
-        }
-    }
-
-    for (int right_idx = to_parse.size() - 1; right_idx >= 0; right_idx--) {
-        if (isdigit(to_parse.at(right_idx))) {
-            result += (to_parse.at(right_idx) - '0');
-            break;
-        }
-    }
-
-    return result;
-}
-
-int numbers_from_string_and_words(const std::string &to_parse) {
-    int result = 0;
-
-    for (int left_idx = 0; left_idx < to_parse.length(); left_idx++) {
-
-        if (isdigit(to_parse.at(left_idx))) {
-            result = (to_parse.at(left_idx) - '0') * 10;
-            break;
-        } else {
+        } else if (PARSE_WORDS) {
             const char* start = to_parse.data() + left_idx;
             const char* end = to_parse.data() + to_parse.length();
             int found_word = word_map.find_word(start, end);
@@ -51,13 +32,14 @@ int numbers_from_string_and_words(const std::string &to_parse) {
         }
     }
 
-    for (int right_idx = to_parse.size() - 1; right_idx >= 0; right_idx--) {
-        if (isdigit(to_parse.at(right_idx))) {
-            result += (to_parse.at(right_idx) - '0');
+    for (int right_idx = to_parse.length() - 1; right_idx >= 0; right_idx--) {
+        char c = to_parse.at(right_idx);
+        if (isdigit(c)) {
+            result += c - '0';
             break;
-        } else {
-            const char* start = to_parse.data() + right_idx;
+        } else if (PARSE_WORDS) {
             const char* end = to_parse.data();
+            const char* start = end + right_idx;
             int found_word = word_map.find_word(start, end, true);
             if (found_word > 0) {
                 result += found_word;
@@ -70,20 +52,20 @@ int numbers_from_string_and_words(const std::string &to_parse) {
 }
 
 void day_1::run() {
-    std::cout << "Part 1\n";
+    std::cout << "Day 1\n";
     std::vector<std::string> input_file;
     read_file(part_a, &input_file);
 
-    int total = 0;
+    clock_t tStart = clock();
+    int part_1_total = 0;
     for (const auto & string : input_file) {
-       total += numbers_from_string(string);
+        part_1_total += numbers_from_string<false>(string);
     }
-    printf("Part 1 Total = '%d', correct answer is '55029'\n\n", total);
-
-    std::cout << "Part 2" << std::endl;
-    total = 0;
+    int part_2_total = 0;
     for (const auto & string : input_file) {
-        total += numbers_from_string_and_words(string);
+        part_2_total += numbers_from_string<true>(string);
     }
-    printf("Part 2 Total = '%d', correct answer is '55029'\n\n", total);
+    printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+    printf("Part 1: %d, correct answer is '55029'\n", part_1_total);
+    printf("Part 2: %d, correct answer is '55686'\n", part_2_total);
 }

@@ -16,13 +16,11 @@ static void consume_to_token(char** line, char token) {
 template<class T>
 static T consume_number(char** line) {
     T number = 0;
-
     while (isdigit(**line)) {
         number *= 10;
         number += **line - '0';
         (*line)++;
     }
-
     return number;
 }
 
@@ -31,8 +29,7 @@ static void consume_all_numbers_to_array(char** line, T* out_array) {
     int array_index = 0;
     while (**line != NULL_TERMINATOR) {
         while(**line == ' ') { (*line)++; }
-        T number = consume_number<T>(line);
-        out_array[array_index] = number;
+        out_array[array_index] = consume_number<T>(line);
         array_index++;
     }
 }
