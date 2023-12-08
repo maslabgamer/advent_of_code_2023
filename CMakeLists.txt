@@ -23,6 +23,8 @@ add_executable(advent_of_code_2023 main.cpp
         problems/day_6.h
         problems/day_7.cpp
         problems/day_7.h
+        problems/day_8.cpp
+        problems/day_8.h
 )
 
 add_subdirectory(tests)

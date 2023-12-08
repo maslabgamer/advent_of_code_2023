@@ -133,22 +133,28 @@ unsigned int parse(std::vector<std::string>& data, bool joker_wildcard = false) 
         char* line = data[line_idx].data();
         s_hand* current_hand = &hands[line_idx];
 
+        int largest_index = 13;
+        int highest_count = 0;
         int card_type_counter[14] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         for (int hand_idx = 0; hand_idx < 5; hand_idx++, line++) {
             int card_type = card_values[*line];
             current_hand->cards[hand_idx] = card_type;
             card_type_counter[card_type - 1]++;
+            if (joker_wildcard && card_type > 1 && card_type_counter[card_type - 1] > highest_count) {
+                highest_count = card_type_counter[card_type - 1];
+                largest_index = card_type - 1;
+            }
         }
         if (joker_wildcard) {
             if (card_type_counter[0] > 0) {
-                int largest_index = 13;
-                int highest_count = 0;
-                for (int counter_idx = 13; counter_idx > 0; counter_idx--) {
-                    if (card_type_counter[counter_idx] > highest_count) {
-                        largest_index = counter_idx;
-                        highest_count = card_type_counter[counter_idx];
-                    }
-                }
+//                int largest_index = 13;
+//                int highest_count = 0;
+//                for (int counter_idx = 13; counter_idx > 0; counter_idx--) {
+//                    if (card_type_counter[counter_idx] > highest_count) {
+//                        largest_index = counter_idx;
+//                        highest_count = card_type_counter[counter_idx];
+//                    }
+//                }
 
                 card_type_counter[largest_index] += card_type_counter[0];
                 card_type_counter[0] = 0;
