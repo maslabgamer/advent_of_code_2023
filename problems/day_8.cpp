@@ -50,8 +50,29 @@ struct maze_node {
 
 class maze_holder {
 public:
-    explicit maze_holder(std::string& ins) {
-        instructions = ins;
+    explicit maze_holder(std::vector<std::string> data) {
+        instructions = data[0];
+
+        std::stack<maze_node*> maze_stack;
+
+        int ghost_counter = 0;
+
+        for (int line_idx = 2; line_idx < data.size(); line_idx++) {
+            maze_node* new_node = add_node(data[line_idx].data());
+            maze_stack.push(new_node);
+
+            if (new_node->is_start_node()) {
+                ghost_paths[ghost_counter] = new_node;
+                ghost_counter++;
+            }
+        }
+
+        while (!maze_stack.empty()) {
+            maze_node* current_node = maze_stack.top();
+            current_node->left = get_node(current_node->left_chars);
+            current_node->right = get_node(current_node->right_chars);
+            maze_stack.pop();
+        }
     }
 
     maze_node* add_node(char* line) {
@@ -65,11 +86,11 @@ public:
     }
 
     int find_path_to_node(
-            const char* start_node,
+            const std::string& start_node,
             const char* end_node) {
         int steps_taken = 0;
 
-        maze_node* current_node = &maze[std::string(start_node)];
+        maze_node* current_node = &maze[start_node];
         int instruction_idx = 0;
         while (!current_node->ends_with(end_node)) {
             current_node = instructions[instruction_idx] == 'L' ? current_node->left : current_node->right;
@@ -80,48 +101,33 @@ public:
         return steps_taken;
     }
 
-private:
-    std::unordered_map<std::string, maze_node> maze;
-    std::string instructions;
-};
-
-unsigned long run_maze(std::vector<std::string> data, bool ghost_traveling = false) {
-    maze_holder maze(data[0]);
-    std::stack<maze_node*> maze_stack;
-
-    int ghost_counter = 0;
-    maze_node* ghost_paths[GHOST_COUNT];
-
-    for (int line_idx = 2; line_idx < data.size(); line_idx++) {
-        maze_node* new_node = maze.add_node(data[line_idx].data());
-        maze_stack.push(new_node);
-
-        if (ghost_traveling && new_node->is_start_node()) {
-            ghost_paths[ghost_counter] = new_node;
-            ghost_counter++;
-        }
-    }
-
-    while (!maze_stack.empty()) {
-        maze_node* current_node = maze_stack.top();
-        current_node->left = maze.get_node(current_node->left_chars);
-        current_node->right = maze.get_node(current_node->right_chars);
-        maze_stack.pop();
-    }
-
-    unsigned long steps_count;
-    if (ghost_traveling) {
+    unsigned long process_ghost_paths() {
         unsigned long ghost_steps_taken[6];
         for (int ghost_idx = 0; ghost_idx < GHOST_COUNT; ghost_idx++) {
-            ghost_steps_taken[ghost_idx] = maze.find_path_to_node(ghost_paths[ghost_idx]->current_pos.c_str(), "Z");
+            ghost_steps_taken[ghost_idx] = find_path_to_node(ghost_paths[ghost_idx]->current_pos, "Z");
         }
 
-        steps_count = ghost_steps_taken[0];
+        unsigned long steps_count = ghost_steps_taken[0];
         for (int ghost_idx = 1; ghost_idx < GHOST_COUNT; ghost_idx++) {
             steps_count = std::lcm(steps_count, ghost_steps_taken[ghost_idx]);
         }
+        return steps_count;
+    }
+
+private:
+    std::unordered_map<std::string, maze_node> maze;
+    std::string instructions;
+
+    maze_node* ghost_paths[GHOST_COUNT]{};
+};
+
+unsigned long run_maze(maze_holder& maze, bool ghost_traveling = false) {
+    unsigned long steps_count;
+    if (ghost_traveling) {
+        steps_count = maze.process_ghost_paths();
     } else {
-        steps_count = maze.find_path_to_node("AAA", "ZZZ");
+        std::string start_str("AAA");
+        steps_count = maze.find_path_to_node(start_str, "ZZZ");
     }
 
     return steps_count;
@@ -133,8 +139,9 @@ void day_8::run() {
 
     printf("Day 8\n");
     clock_t tStart = clock();
-    unsigned long steps_taken = run_maze(input_file);
-    unsigned long ghost_steps_taken = run_maze(input_file, true);
+    maze_holder maze(input_file);
+    unsigned long steps_taken = run_maze(maze);
+    unsigned long ghost_steps_taken = run_maze(maze, true);
     printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
     printf("Part 1: %lu and the answer was 13207!\n", steps_taken);
     printf("Part 2: %lu and the answer was 12324145107121!\n", ghost_steps_taken);
