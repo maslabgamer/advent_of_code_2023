@@ -2,11 +2,12 @@
 // Created by Maslab on 12/2/2023.
 //
 
-#include "../parsing/file_reader.h"
+#include "day_3.h"
+
+#include "file_reader.h"
 
 #include <cctype>
 #include <vector>
-#include "day_3.h"
 
 int parse_number_from_line_index(std::string& line, int starting_index, bool destroy = true) {
     // First find the left and right bounds.

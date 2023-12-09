@@ -4,8 +4,8 @@
 
 #include "day_2.h"
 
-#include "../parsing/file_reader.h"
-#include "../parsing/string_parsing.h"
+#include "file_reader.h"
+#include "string_parsing.h"
 
 #include <ctime>
 #include <iostream>

@@ -4,14 +4,14 @@
 
 #include "day_5.h"
 
+#include "file_reader.h"
+#include "string_parsing.h"
+
 #include <ctime>
 #include <unordered_map>
 #include <vector>
 #include <iostream>
 #include <stack>
-
-#include "../parsing/file_reader.h"
-#include "../parsing/string_parsing.h"
 
 struct seed_pair {
     seed_pair(long s, long r) : seed_pair(0, s, r) {}

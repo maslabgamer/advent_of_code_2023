@@ -4,8 +4,8 @@
 
 #include "day_1.h"
 
-#include "../parsing/file_reader.h"
-#include "../parsing/word_to_number.h"
+#include "file_reader.h"
+#include "word_to_number.h"
 
 #include <iostream>
 #include <vector>
