@@ -39,34 +39,34 @@ bool generate_difference_sequence(sequence* start_sequence, sequence* out_sequen
 }
 
 long parse_sequence(char* line, long* out_start_num) {
-    sequence main_sequence{};
+    int sequences_count = 1;
+    sequence sequences[30];
+    sequences[0].count = 0;
     while (*line != NULL_TERMINATOR) {
         while (*line == ' ') { line++; }
-        main_sequence.add_element(consume_number<long>(&line));
+        sequences[0].add_element(consume_number<long>(&line));
     }
-
-    std::stack<sequence> sequences;
-    sequences.push(main_sequence);
 
     bool diffs_are_all_zeroes = false;
     while (!diffs_are_all_zeroes) {
-        sequence* previous_sequence = &sequences.top();
+        sequence* previous_sequence = &sequences[sequences_count - 1];
         sequence new_sequence{};
-        sequences.push(new_sequence);
-        diffs_are_all_zeroes = generate_difference_sequence(previous_sequence, &sequences.top());
+        sequences[sequences_count] = new_sequence;
+        diffs_are_all_zeroes = generate_difference_sequence(previous_sequence, &sequences[sequences_count]);
+        sequences_count++;
     }
 
     long current_start = 0;
-    while (sequences.size() > 1) {
-        long current_diff = sequences.top().get_last_element();
-        sequences.pop();
-        sequence* current_seq = &sequences.top();
+    while (sequences_count > 1) {
+        sequences_count--;
+        long current_diff = sequences[sequences_count].get_last_element();
+        sequence* current_seq = &sequences[sequences_count - 1];
         current_seq->add_element(current_seq->get_last_element() + current_diff);
         current_start = current_seq->numbers[0] - current_start;
     }
     *out_start_num += current_start;
 
-    return sequences.top().get_last_element();
+    return sequences[0].get_last_element();
 }
 
 long parse(std::vector<std::string>& data, long* start_total) {
