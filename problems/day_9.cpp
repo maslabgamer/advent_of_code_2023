@@ -81,7 +81,7 @@ void day_9::run() {
     std::vector<std::string> input_file;
     read_file(part_a, &input_file);
 
-    printf("Day 8\n");
+    printf("Day 9\n");
     clock_t tStart = clock();
     long start_total = 0;
     long total = parse(input_file, &start_total);
