@@ -16,12 +16,17 @@ static void consume_to_token(char** line, char token) {
 template<class T>
 static T consume_number(char** line) {
     T number = 0;
+    bool is_negative = false;
+    if (**line == '-') {
+        (*line)++;
+        is_negative = true;
+    }
     while (isdigit(**line)) {
         number *= 10;
         number += **line - '0';
         (*line)++;
     }
-    return number;
+    return is_negative ? -number : number;
 }
 
 template<class T>

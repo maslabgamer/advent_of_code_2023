@@ -24,6 +24,8 @@ add_executable(advent_of_code_2023 main.cpp
         problems/day_7.h
         problems/day_8.cpp
         problems/day_8.h
+        problems/day_9.cpp
+        problems/day_9.h
 )
 
 target_link_libraries(advent_of_code_2023 parsing_lib)
