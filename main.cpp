@@ -8,6 +8,8 @@
 #include "problems/day_7.h"
 #include "problems/day_8.h"
 #include "problems/day_9.h"
+#include "problems/day_10.h"
+#include "problems/day_11.h"
 
 int main() {
 //    day_1().run();
@@ -18,7 +20,9 @@ int main() {
 //    day_6().run();
     //day_7().run();
 //    day_8().run();
-    day_9().run();
+//    day_9().run();
+    //day_10().run();
+    day_11().run();
 
     return 0;
 }

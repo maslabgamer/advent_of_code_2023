@@ -39,4 +39,14 @@ static void consume_all_numbers_to_array(char** line, T* out_array) {
     }
 }
 
+static bool char_is_in_list(char c, const char* c_list) {
+    while(*c_list != NULL_TERMINATOR) {
+        if (c == *c_list) {
+            return true;
+        }
+        c_list++;
+    }
+    return false;
+}
+
 #endif //ADVENT_OF_CODE_2023_STRING_PARSING_H
